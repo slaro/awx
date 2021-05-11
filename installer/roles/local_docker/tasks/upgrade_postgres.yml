@@ -43,6 +43,12 @@
     dest: "{{ postgres_data_dir + '/10/data/' }}"
   when: upgrade_postgres | bool
 
+- name: Allow TCP connections with md5-hashed password
+  ansible.builtin.lineinfile:
+    path: "{{ postgres_data_dir + '/pgdata/pg_hba.conf' }}"
+    line: host	all		all		all			md5
+  when: upgrade_postgres | bool
+
 - name: Remove old data directory
   file:
     path: "{{ postgres_data_dir + '/pgdata' }}"
